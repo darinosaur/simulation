@@ -7,7 +7,7 @@ namespace simulationHW
 
     class MainClass
     {
-        static Random random1 = new Random();
+        static Random random = new Random();
 
         public struct SimulationDay
         {
@@ -29,18 +29,18 @@ namespace simulationHW
         public static int DemandCount()
         {
             
-            int demandRandom = random1.Next(0, 100);
+            int demandRandom = random.Next(1, 100);
             int demand = 0;
 
-            if ((demandRandom >= 0) && (demandRandom < 11))
+            if ((demandRandom > 0) && (demandRandom <= 10))
                 demand = 0;
-            else if ((demandRandom > 10) && (demandRandom < 36))
+            else if ((demandRandom > 10) && (demandRandom <= 35))
                 demand = 1;
-            else if ((demandRandom > 35) && (demandRandom < 71))
+            else if ((demandRandom > 35) && (demandRandom <= 70))
                 demand = 2;
-            else if ((demandRandom > 70) && (demandRandom < 92))
+            else if ((demandRandom > 70) && (demandRandom <= 91))
                 demand = 3;
-            else if ((demandRandom > 91) && (demandRandom < 101))
+            else if ((demandRandom > 91) && (demandRandom <= 100))
                 demand = 4;
             
             //Console.WriteLine(demandRandom);
@@ -50,15 +50,15 @@ namespace simulationHW
 
         public static int LeadTime()
         {
-            Random random2 = new Random();
-            int leadRandom = random2.Next(0, 100);
+            
+            int leadRandom = random.Next(1, 100);
             int lead = 0;
 
-            if ((leadRandom >= 0) && (leadRandom < 61))
+            if ((leadRandom > 0) && (leadRandom <= 60))
                 lead = 1;
-            else if ((leadRandom > 60) && (leadRandom < 91))
+            else if ((leadRandom > 60) && (leadRandom <= 90))
                 lead = 2;
-            else if ((leadRandom > 90) && (leadRandom < 101))
+            else if ((leadRandom > 90) && (leadRandom <= 100))
                 lead = 3;
             return lead;
         }
