@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace simulationHW
 {
-    //разобраться со списками
+
 
     class MainClass
     {
@@ -20,10 +20,10 @@ namespace simulationHW
 
         public struct Replication
         {
-            public int Number; //порядковый номер из пяти
+            public int Number; 
             public int orderSize;
             public int reorderPoint;
-            public List<SimulationDay> sd; //структура
+            public List<SimulationDay> sd; // simulation day
         }
 
         public static int DemandCount()
@@ -42,8 +42,6 @@ namespace simulationHW
                 demand = 3;
             else if ((demandRandom > 91) && (demandRandom <= 100))
                 demand = 4;
-            
-            //Console.WriteLine(demandRandom);
 
             return demand;
         }
@@ -108,7 +106,7 @@ namespace simulationHW
 
                 List<SimulationDay> simD = new List<SimulationDay>();
 
-                //нулевой день
+                //zero day
                 BlankDay.beginingInventory = 0;
                 BlankDay.dayNumber = 0;
                 BlankDay.demand = 0;
@@ -116,7 +114,7 @@ namespace simulationHW
                 BlankDay.shortage = 0;
 
                 simD.Add(BlankDay);
-                //добавили нулевой день
+                //
 
                 switch (repNum)
                 {
@@ -140,42 +138,45 @@ namespace simulationHW
                 Console.WriteLine("Replication #" + repNum);
                 for (int day = 1; day <= numberOfDays; day++)
                 {
-                    BlankDay.dayNumber = day; //neobyaz
+                    BlankDay.dayNumber = day;
 
-                    if (orderKey) //если вчера в конце дня решили что нужно делать заказ
+                    if (orderKey) //if yesterday we decided that we need to make an order
                     {
-                        orderArrivesDay = day + LeadTime(); //находим когда заказ придет
-                        orderKey = false; //больше заказывать не нужно
-                        orderMadeKey = true; //мы в ожидании заказа
+                        orderArrivesDay = day + LeadTime(); 
+                        orderKey = false; //we don't need to make an order anymore
+                        orderMadeKey = true; //we are waiting for an order
                     }
 
                     BlankDay.beginingInventory = Rep[repNum-1].sd[day - 1].endingInventory;
 
-                    if ((orderMadeKey) && (day == orderArrivesDay)) //если сегодня прибывает заказ
+                    if ((orderMadeKey) && (day == orderArrivesDay)) //if today is the day the order comes
                     {
-                        BlankDay.beginingInventory += Rep[repNum - 1].orderSize; //заказ пришел, казна пополнилась
-                        orderMadeKey = false; //больше заказ не ждем
+                        BlankDay.beginingInventory += Rep[repNum - 1].orderSize; //order arrived
+                        orderMadeKey = false; //we are not waiting for an order anymore
                     }
 
-                    BlankDay.demand = DemandCount(); //узнаем сегодняшний спрос
-                    BlankDay.endingInventory = BlankDay.beginingInventory - BlankDay.demand; //обслужили из казны
+                    BlankDay.demand = DemandCount(); //today's demand
+                    BlankDay.endingInventory = BlankDay.beginingInventory - BlankDay.demand; //bye bye demand
                    
-                    if (BlankDay.endingInventory < 0) //если ушли в минус
-                        BlankDay.shortage = (-1) * BlankDay.endingInventory; //создаем недостаток, по заданию, для статистики
-                    else BlankDay.shortage = 0;
+                    if (BlankDay.endingInventory < 0) //if we have shortage
+                        BlankDay.shortage = (-1) * BlankDay.endingInventory; // "shortage has to be made up"
+                    else 
+                        BlankDay.shortage = 0;
 
-                    if (!orderMadeKey) //если не ждем заказ
-                        if (BlankDay.endingInventory < Rep[repNum - 1].reorderPoint) //проверяем достигли ли мы точки заказа
+                    if (!orderMadeKey) //if we are not waiting for an order
+                        if (BlankDay.endingInventory < Rep[repNum - 1].reorderPoint) //check whether or not we got to reorder point
                         {
-                            orderKey = true; //завтра утром нужно будет заказать
+                            orderKey = true; //tomorrow morning we have to make an order
                         }
 
-                    endInvSum += BlankDay.endingInventory;
-                    shortageSum += BlankDay.shortage;
+                    endInvSum += BlankDay.endingInventory; //sum for ending inventory calculation
+                    shortageSum += BlankDay.shortage; // the same for shortage
 
                     if (BlankDay.shortage > maxShortage) 
                         maxShortage = BlankDay.shortage;
+                    
                     Console.WriteLine(BlankDay.dayNumber+"th day, BI:" + BlankDay.beginingInventory + " EI:" + BlankDay.endingInventory + " Demand:" + BlankDay.demand + " Shortage:" + BlankDay.shortage);
+
                     simD.Add(BlankDay);
                 }
 
