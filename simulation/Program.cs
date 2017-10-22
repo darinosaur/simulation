@@ -7,6 +7,7 @@ namespace simulationHW
 
     class MainClass
     {
+        static Random random1 = new Random();
 
         public struct SimulationDay
         {
@@ -27,7 +28,7 @@ namespace simulationHW
 
         public static int DemandCount()
         {
-            Random random1 = new Random();
+            
             int demandRandom = random1.Next(0, 100);
             int demand = 0;
 
@@ -42,6 +43,8 @@ namespace simulationHW
             else if ((demandRandom > 91) && (demandRandom < 101))
                 demand = 4;
             
+            //Console.WriteLine(demandRandom);
+
             return demand;
         }
 
@@ -60,7 +63,7 @@ namespace simulationHW
             return lead;
         }
 
-        public static double getStandardDeviation(List<double> doubleList)  
+        public static double GetStandardDeviation(List<double> doubleList)  
         {  
             double average = 0;
             double sumOfDerivation = 0;  
@@ -86,10 +89,7 @@ namespace simulationHW
             double shortageSum = 0;
             double maxShortage = 0;
 
-           
-
             List<Replication> Rep = new List<Replication>();
-            //Fill with: (1,11,3,simD), (2,10,3), (3,12,3), (4,11,2), (5,11,4)
 
             SimulationDay BlankDay;
 
@@ -137,6 +137,7 @@ namespace simulationHW
                         break;
                 }
 
+                Console.WriteLine("Replication #" + repNum);
                 for (int day = 1; day <= numberOfDays; day++)
                 {
                     BlankDay.dayNumber = day; //neobyaz
@@ -174,7 +175,7 @@ namespace simulationHW
 
                     if (BlankDay.shortage > maxShortage) 
                         maxShortage = BlankDay.shortage;
-
+                    Console.WriteLine(BlankDay.dayNumber+"th day, BI:" + BlankDay.beginingInventory + " EI:" + BlankDay.endingInventory + " Demand:" + BlankDay.demand + " Shortage:" + BlankDay.shortage);
                     simD.Add(BlankDay);
                 }
 
@@ -188,19 +189,16 @@ namespace simulationHW
                 //output of this replication
             }
             Console.Write("Ending Inventory ");
-            double endInvStDev = getStandardDeviation(endInvAverage);
+            double endInvStDev = GetStandardDeviation(endInvAverage);
             Console.WriteLine("Standard deviation of Ending Inventory is " + endInvStDev);
 
             Console.Write("Shortage ");
-            double shrtgStDev = getStandardDeviation(shrtgAverage);
+            double shrtgStDev = GetStandardDeviation(shrtgAverage);
             Console.WriteLine("Standard deviation of Shortage is " + shrtgStDev);
 
             Console.Write("Maximum shortage ");
-            double maxShrtgStDev = getStandardDeviation(maxShrtgList);
+            double maxShrtgStDev = GetStandardDeviation(maxShrtgList);
             Console.WriteLine("Standard deviation of Max Shortages is " + maxShrtgStDev);
-            // output of all replications average
-            //Replication N averages: BIa: Da: EIa: Sa: 
-            //comparison
         }
     }
 }
