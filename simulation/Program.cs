@@ -71,7 +71,7 @@ namespace simulationHW
             }
             average /= doubleList.Count;
             double sumOfDerivationAverage = sumOfDerivation / (doubleList.Count - 1);
-            Console.WriteLine("Mean is " + average);
+            Console.WriteLine("mean is " + average);
             return Math.Sqrt(sumOfDerivationAverage - (average*average));  
         }  
 
@@ -86,29 +86,12 @@ namespace simulationHW
             double shortageSum = 0;
             double maxShortage = 0;
 
-            List<SimulationDay> simD = new List<SimulationDay>();
-            //fill simd0 with 0 0 9 0 0
+           
 
             List<Replication> Rep = new List<Replication>();
             //Fill with: (1,11,3,simD), (2,10,3), (3,12,3), (4,11,2), (5,11,4)
 
             SimulationDay BlankDay;
-
-            //нулевой день
-            BlankDay.beginingInventory = 0;
-            BlankDay.dayNumber = 0;
-            BlankDay.demand = 0;
-            BlankDay.endingInventory = 9;
-            BlankDay.shortage = 0;
-
-            simD.Add(BlankDay);
-            //добавили нулевой день
-
-            Rep.Add(new Replication { Number = 1, orderSize = 11, reorderPoint = 3, sd = simD});
-            Rep.Add(new Replication { Number = 2, orderSize = 10, reorderPoint = 3, sd = simD});
-            Rep.Add(new Replication { Number = 3, orderSize = 12, reorderPoint = 3, sd = simD});
-            Rep.Add(new Replication { Number = 4, orderSize = 11, reorderPoint = 2, sd = simD});
-            Rep.Add(new Replication { Number = 5, orderSize = 11, reorderPoint = 4, sd = simD});
 
             List<double> endInvAverage = new List<double>();
             List<double> shrtgAverage = new List<double>();
@@ -122,6 +105,37 @@ namespace simulationHW
                 endInvSum = 0;
                 shortageSum = 0;
                 maxShortage = 0;
+
+                List<SimulationDay> simD = new List<SimulationDay>();
+
+                //нулевой день
+                BlankDay.beginingInventory = 0;
+                BlankDay.dayNumber = 0;
+                BlankDay.demand = 0;
+                BlankDay.endingInventory = 9;
+                BlankDay.shortage = 0;
+
+                simD.Add(BlankDay);
+                //добавили нулевой день
+
+                switch (repNum)
+                {
+                    case 1:
+                        Rep.Add(new Replication { Number = 1, orderSize = 11, reorderPoint = 3, sd = simD });
+                        break;
+                    case 2:
+                        Rep.Add(new Replication { Number = 2, orderSize = 10, reorderPoint = 3, sd = simD });
+                        break;
+                    case 3:
+                        Rep.Add(new Replication { Number = 3, orderSize = 12, reorderPoint = 3, sd = simD });
+                        break;
+                    case 4:
+                        Rep.Add(new Replication { Number = 4, orderSize = 11, reorderPoint = 2, sd = simD });
+                        break;
+                    case 5:
+                        Rep.Add(new Replication { Number = 5, orderSize = 11, reorderPoint = 4, sd = simD });
+                        break;
+                }
 
                 for (int day = 1; day <= numberOfDays; day++)
                 {
@@ -157,23 +171,31 @@ namespace simulationHW
 
                     endInvSum += BlankDay.endingInventory;
                     shortageSum += BlankDay.shortage;
+
                     if (BlankDay.shortage > maxShortage) 
                         maxShortage = BlankDay.shortage;
 
                     simD.Add(BlankDay);
                 }
-                //change an existing item in list
+
                 endInvSum /= numberOfDays; //average ending inventory
                 endInvAverage.Add(endInvSum);
+
                 shortageSum /= numberOfDays; //average shortage
                 shrtgAverage.Add(shortageSum);
+
                 maxShrtgList.Add(maxShortage);
                 //output of this replication
             }
+            Console.Write("Ending Inventory ");
             double endInvStDev = getStandardDeviation(endInvAverage);
             Console.WriteLine("Standard deviation of Ending Inventory is " + endInvStDev);
+
+            Console.Write("Shortage ");
             double shrtgStDev = getStandardDeviation(shrtgAverage);
             Console.WriteLine("Standard deviation of Shortage is " + shrtgStDev);
+
+            Console.Write("Maximum shortage ");
             double maxShrtgStDev = getStandardDeviation(maxShrtgList);
             Console.WriteLine("Standard deviation of Max Shortages is " + maxShrtgStDev);
             // output of all replications average
