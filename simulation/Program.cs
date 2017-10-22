@@ -89,6 +89,12 @@ namespace simulationHW
 
             List<Replication> Rep = new List<Replication>();
 
+               Rep.Add(new Replication { Number = 1, orderSize = 11, reorderPoint = 3, sd = new List<SimulationDay>() });
+               Rep.Add(new Replication { Number = 2, orderSize = 10, reorderPoint = 3, sd = new List<SimulationDay>() });
+               Rep.Add(new Replication { Number = 3, orderSize = 12, reorderPoint = 3, sd = new List<SimulationDay>() });
+               Rep.Add(new Replication { Number = 4, orderSize = 11, reorderPoint = 2, sd = new List<SimulationDay>() });
+               Rep.Add(new Replication { Number = 5, orderSize = 11, reorderPoint = 4, sd = new List<SimulationDay>() });
+                   
             SimulationDay BlankDay;
 
             List<double> endInvAverage = new List<double>();
@@ -104,7 +110,7 @@ namespace simulationHW
                 shortageSum = 0;
                 maxShortage = 0;
 
-                List<SimulationDay> simD = new List<SimulationDay>();
+                //List<SimulationDay> simD = new List<SimulationDay>();
 
                 //zero day
                 BlankDay.beginingInventory = 0;
@@ -113,27 +119,8 @@ namespace simulationHW
                 BlankDay.endingInventory = 9;
                 BlankDay.shortage = 0;
 
-                simD.Add(BlankDay);
+                Rep[repNum-1].sd.Add(BlankDay);
                 //
-
-                switch (repNum)
-                {
-                    case 1:
-                        Rep.Add(new Replication { Number = 1, orderSize = 11, reorderPoint = 3, sd = simD });
-                        break;
-                    case 2:
-                        Rep.Add(new Replication { Number = 2, orderSize = 10, reorderPoint = 3, sd = simD });
-                        break;
-                    case 3:
-                        Rep.Add(new Replication { Number = 3, orderSize = 12, reorderPoint = 3, sd = simD });
-                        break;
-                    case 4:
-                        Rep.Add(new Replication { Number = 4, orderSize = 11, reorderPoint = 2, sd = simD });
-                        break;
-                    case 5:
-                        Rep.Add(new Replication { Number = 5, orderSize = 11, reorderPoint = 4, sd = simD });
-                        break;
-                }
 
                 Console.WriteLine("Replication #" + repNum);
                 for (int day = 1; day <= numberOfDays; day++)
@@ -177,7 +164,7 @@ namespace simulationHW
                     
                     Console.WriteLine(BlankDay.dayNumber+"th day, BI:" + BlankDay.beginingInventory + " EI:" + BlankDay.endingInventory + " Demand:" + BlankDay.demand + " Shortage:" + BlankDay.shortage);
 
-                    simD.Add(BlankDay);
+                    Rep[repNum - 1].sd.Add(BlankDay);
                 }
 
                 endInvSum /= numberOfDays; //average ending inventory
